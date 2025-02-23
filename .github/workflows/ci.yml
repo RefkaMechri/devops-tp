@@ -1,31 +1,22 @@
-name: CI/CD Pipeline
+name: CI
 
-on:
-  push:
-    branches:
-      - main  # Déclenche le pipeline à chaque push sur main
+on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-      
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      
-      - name: Install Dependencies
-        run: pip install -r hello-devops/requirements.txt
-      
-      - name: Run Tests
-        run: python -m unittest discover -s hello-devops
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9"]
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
     steps:
-      - name: Deploy App
-        run: echo "Deploying application..."
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        
+
+  notify:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Notifying Slack... (simulation)"
