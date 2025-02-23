@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return "Hello, CI/CD !"  # Omission de l'exclamation
+    return "Hello, CI/CD"  # Omission de l'exclamation
 
 @app.route('/status')
 def status():
